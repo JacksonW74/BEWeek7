@@ -5,4 +5,4 @@ https://youtu.be/X71QusFdw6s - Week7 Connected to the database
 
 https://youtu.be/BeNXofoxYjk - Week8 Designed the ERD
 
- - Week 9 Wrote code to make a working console input new project into the database and return the ID, name, estimatedHours, actualHours, difficulty and notes.
+https://youtu.be/fmfM2E_SMII - Week 9 Constructed the application menu, Wrote code to add a new project to the project table, made modifications to the project service, modified the project DOA, and successfully tested the updates.
