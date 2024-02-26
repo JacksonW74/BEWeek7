@@ -18,7 +18,9 @@ public class ProjectsApp {
     private List<String> operations = List.of(
     		"1) Add a project",
     		"2) List projects",
-    		"3) Select a project"
+    		"3) Select a project",
+    		"4) Update project details",
+    		"5) Delete a project"
     );
     //@formatter:on
     private Scanner scanner = new Scanner(System.in);
@@ -61,6 +63,16 @@ public class ProjectsApp {
                         System.out.println("You selected 'Select a project'.");
                         break;
                         
+                    case 4:
+                        updateProjectDetails(); // Call method updateProjectDetails()
+                        System.out.println("You selected 'Update project details'.");
+                        break;
+                                                
+                    case 5:
+                        deleteProject(); // Call the new method for deleting a project
+                        System.out.println("You selected 'Delete a project'.");
+                        break;
+                        
                     default:
                         printOperations();
                         System.out.println("\n     " + selection + " is not a valid selection. Try again.");
@@ -74,6 +86,66 @@ public class ProjectsApp {
         }
     }
 
+    private void deleteProject() {
+        listProjects();
+        int projectIdToDelete = getIntInput("Enter the ID of the project to delete");
+
+        try {
+            projectService.deleteProjectById(projectIdToDelete);
+            System.out.println("Project deleted successfully.");
+
+            // Check if the project ID in the current project is the same as the ID entered by the user
+            if (curProject != null && curProject.getProjectId() == projectIdToDelete) {
+                curProject = null;
+            }
+        } catch (Exception e) {
+            System.out.println("An error occurred while deleting the project: " + e.getMessage());
+        }
+    }
+    
+	private void updateProjectDetails() {
+        listProjects();
+
+        // Check if there is a selected project
+        if (Objects.isNull(curProject)) {
+            System.out.println("\nPlease select a project.");
+            return;
+        }
+
+        // Update project details
+        updateProjectFields();
+    }
+    
+    private void updateProjectFields() {
+        Project updatedProject = new Project();
+
+        // Iterate over each field in the Project object
+        // Print the current setting and get user input for update
+        String projectName = getStringInput("Enter the project name[" + curProject.getProjectName() + "]");
+        updatedProject.setProjectName(Objects.nonNull(projectName) ? projectName : curProject.getProjectName());
+
+        BigDecimal estimatedHours = getDecimalInput("Enter the estimated hours[" + curProject.getEstimatedHours() + "]");
+        updatedProject.setEstimatedHours(Objects.nonNull(estimatedHours) ? estimatedHours : curProject.getEstimatedHours());
+
+        BigDecimal actualHours = getDecimalInput("Enter the actual hours[" + curProject.getActualHours() + "]");
+        updatedProject.setActualHours(Objects.nonNull(actualHours) ? actualHours : curProject.getActualHours());
+
+        Integer difficulty = getIntInput("Enter the project difficulty[" + curProject.getDifficulty() + "]");
+        updatedProject.setDifficulty(Objects.nonNull(difficulty) ? difficulty : curProject.getDifficulty());
+
+        String notes = getStringInput("Enter the project notes[" + curProject.getNotes() + "]");
+        updatedProject.setNotes(Objects.nonNull(notes) ? notes : curProject.getNotes());
+
+        // Set the project ID field
+        updatedProject.setProjectId(curProject.getProjectId());
+
+        // Call projectService to modify project details
+        projectService.modifyProjectDetails(updatedProject);
+
+        // Fetch the updated project details
+        curProject = projectService.fetchProjectById(curProject.getProjectId());
+    }
+    
     private void selectProject() {
         listProjects();
         Integer projectId = getIntInput("Enter a project ID to select a project");

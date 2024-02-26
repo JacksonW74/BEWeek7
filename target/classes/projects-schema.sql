@@ -54,3 +54,40 @@ CREATE TABLE project_category (
     FOREIGN KEY (project_id) REFERENCES project(project_id) ON DELETE CASCADE,
     FOREIGN KEY (category_id) REFERENCES category(category_id) ON DELETE CASCADE
 );
+
+select * from project;
+
+-- Add sample projects
+
+INSERT INTO project (project_id, project_name, estimated_hours, actual_hours, difficulty, notes)
+VALUES 
+    (1, 'Hang door', 3, 4, 3, 'Get door hangers from Home Depot'),
+   	(2, 'Build birdhouse', 3, 4, 3, 'This is for a small bird');
+
+INSERT INTO material (project_id, material_name, num_required, cost) 
+VALUES 
+    (1, 'Door in frame material', 1, 200),
+    (1, 'Package of door hangers from Home Depot', 1, 6.99),
+    (1, '2-inch screws', 20, 5.99),
+   	(2, '1 x 6 x 8 pine board', 2, 15.99),
+  	(2, 'waterproof wood glue', 1, 6.99),
+ 	(2, 'paint', 1, 25.99);
+
+-- Add sample materials
+INSERT INTO category (category_name) 
+VALUES 
+    ('Doors and Windows'),
+    ('Repairs'),
+   	('Hobby builds');
+
+-- Add sample steps
+INSERT INTO step (project_id, step_text, step_order) 
+VALUES 
+    (1, 'Screw door hangers on the top and bottom of each side of the door', 1),
+    (1, 'Screw hangers into frame', 2),
+   	(2, 'Cut boards to length, 4 sides, a bottom and 2 top pieces', 1),
+   	(2, 'Glue baords together and hold in place with clamps until dry', 2),
+   	(2, 'Apply paint until all parts are adequately coated', 3);
+    
+-- Add sample categories
+INSERT INTO category (category_name) VALUES ('Category 1'), ('Category 2');

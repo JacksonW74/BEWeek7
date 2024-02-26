@@ -225,5 +225,43 @@ public class ProjectDao extends DaoBase {
             throw new DbException(e);
         }
     }
+
+	public void updateProject(Project project) {
+        String sql = "UPDATE project SET project_name = ?, estimated_hours = ?, actual_hours = ?, " +
+                "difficulty = ?, notes = ? WHERE project_id = ?";
+
+        try (Connection conn = DbConnection.getConnection();
+        		PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        	// Set parameters for the update statement
+        	setParameter(stmt, 1, project.getProjectName(), String.class);
+        	setParameter(stmt, 2, project.getEstimatedHours(), BigDecimal.class);
+        	setParameter(stmt, 3, project.getActualHours(), BigDecimal.class);
+        	setParameter(stmt, 4, project.getDifficulty(), Integer.class);
+        	setParameter(stmt, 5, project.getNotes(), String.class);
+        	setParameter(stmt, 6, project.getProjectId(), Integer.class);
+
+        	// Execute the update statement
+        	stmt.executeUpdate();
+
+        } catch (SQLException e) {
+        	throw new DbException("Error updating project details: " + e.getMessage(), e);
+        }
+    }
+        
+    public void deleteProjectById(Integer projectId) {
+        // Implement the logic to delete a project by its ID
+        String deleteProjectSql = "DELETE FROM project WHERE project_id = ?";
+
+        try (Connection conn = DbConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(deleteProjectSql)) {
+
+        	setParameter(stmt, 1, projectId, Integer.class);
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new DbException("Error deleting project: " + e.getMessage(), e);
+        }
+    }
 }
 
